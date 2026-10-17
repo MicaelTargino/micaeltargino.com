@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Media Plan Agent and Ad Server Campaign Automation | Micael Targino</title>
+<meta name="description" content="An AI agent reads agency media plans in any layout. An automation then builds the campaign on the ad server.">
+<meta property="og:title" content="AI Media Plan Agent and Ad Server Campaign Automation | Micael Targino">
+<meta property="og:description" content="An AI agent reads agency media plans in any layout. An automation then builds the campaign on the ad server.">
+<meta name="theme-color" content="#0b1020">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body class="case-page">
+<nav class="case-nav wrap"><a class="link" href="../index.html#03-media-plan-agent">Back to all work</a><a class="who-mini" href="../index.html"><img class="avatar" src="../photo.jpg" alt="Micael Targino" width="56" height="56"><span>Micael Targino</span></a></nav>
+<header class="case-hero wrap">
+  <h1 class="case-title">AI Media Plan Agent and Ad Server Campaign Automation</h1>
+  <p class="case-role"><span class="live" aria-hidden="true"></span>Engineer — design and implementation of the agent and the automation</p>
+  <div class="case-screen">
+  <div class="screen screen-scroll" data-base="../" data-screen='{&quot;video&quot;:&quot;media/03-media-plan-agent/reel.mp4&quot;,&quot;poster&quot;:&quot;media/03-media-plan-agent/poster.jpg&quot;,&quot;shots&quot;:[&quot;media/03-media-plan-agent/00-cover.jpg&quot;,&quot;media/03-media-plan-agent/01-upload-media-plan.jpg&quot;,&quot;media/03-media-plan-agent/02-agent-processing.jpg&quot;,&quot;media/03-media-plan-agent/03-review-adp.jpg&quot;,&quot;media/03-media-plan-agent/04-campaign-setup-done.jpg&quot;]}'>
+    <div class="screen-bar"><i></i><i></i><i></i></div>
+    <div class="screen-stage">
+      <img class="screen-poster" src="../media/03-media-plan-agent/poster.jpg" alt="Media plan to live campaign screen" loading="lazy">
+    </div>
+  </div></div>
+  <div class="stats stats-wide">
+  <div class="stat">
+    <s class="stat-from">~3 h</s>
+    <span class="stat-value" data-count>~10 min</span>
+    <span class="stat-label">campaign setup</span>
+  </div>
+  <div class="stat">
+    
+    <span class="stat-value" data-count>−83%</span>
+    <span class="stat-label">time from media plan to live campaign</span>
+  </div></div>
+</header>
+<main class="wrap case-body">
+  <article class="prose"><h2>The problem</h2>
+<p>Campaigns on Metrike's platform start with a media plan sent by the agency: a spreadsheet built in that agency's own format. Merged headers, vehicles spread across rows, formats written in different ways, periods marked as weeks. Before anything could run, someone had to translate that plan into Metrike's standard ad delivery plan (ADP), and then create everything on the external ad server by hand: advertisers, zones, campaigns, display creatives and VAST video. The setup step alone took about 3 hours of manual work per campaign.</p>
+<h2>What I built</h2>
+<ul><li><strong>Media plan agent.</strong> An AI agent built on Claude with tool use reads the uploaded spreadsheet, identifies vehicles, formats, periods and quantities, and returns rows in the standard ADP structure. It runs in a queue, so the user can upload and come back later instead of waiting on a request.</li><li><strong>Review before import.</strong> The generated ADP opens in an editable table. Rows and cells the agent is not sure about are flagged with a short note, and a person fixes or confirms them before approving the import.</li><li><strong>Campaign setup automation.</strong> From an approved ADP, the platform builds a plan of every action needed on the external ad server (advertisers, zones, campaigns, creatives, display and VAST), shows it for confirmation, and then executes it through the ad server's REST API.</li></ul>
+<h2>Key decisions</h2>
+<ul><li><strong>Human in the loop at one point.</strong> The agent does the reading and normalizing, but nothing reaches the ad server until a person approves the ADP. Uncertain values are marked instead of guessed, so review time goes to the few cells that need it.</li><li><strong>Async processing.</strong> Conversions run as queued jobs with status polling, which keeps the web request short and lets large plans take the time they need.</li><li><strong>Plan, then execute.</strong> Setup is split into a plan step and an execute step. The plan is reviewable before anything is created.</li><li><strong>Idempotent and resumable.</strong> Each action has a stable key and stores the ID the ad server returns. Entities that already exist are reused, not duplicated, and an interrupted run continues from the last completed action.</li></ul>
+<h2>Results</h2>
+<ul><li>The whole process, from media plan to live campaign, takes 83% less time.</li><li>Campaign setup went from about 3 hours of manual work to about 10 minutes.</li><li>Stack: Laravel/PHP platform, queues for async processing, Claude API with tool use, external ad server REST API.</li></ul></article>
+  <section class="gallery" aria-label="Screens"><figure><img src="../media/03-media-plan-agent/00-cover.jpg" alt="Media plan to live campaign screen" loading="lazy"></figure><figure><img src="../media/03-media-plan-agent/01-upload-media-plan.jpg" alt="Media plan to live campaign screen" loading="lazy"></figure><figure><img src="../media/03-media-plan-agent/02-agent-processing.jpg" alt="Media plan to live campaign screen" loading="lazy"></figure><figure><img src="../media/03-media-plan-agent/03-review-adp.jpg" alt="Media plan to live campaign screen" loading="lazy"></figure><figure><img src="../media/03-media-plan-agent/04-campaign-setup-done.jpg" alt="Media plan to live campaign screen" loading="lazy"></figure></section>
+  <a class="next" href="02-faturadoc.html"><span class="next-label">Next project</span><span class="next-name">FaturaDoc</span></a>
+</main>
+
+<footer class="contact" id="contact">
+  <div class="wrap">
+    <h2 class="contact-line">Have a system that is slow, fragile or still done by hand?</h2>
+    <div class="contact-actions">
+      <a class="btn btn-primary" href="mailto:micaelgomestargino@gmail.com?subject=Project%20or%20role%20for%20Micael">Email me</a>
+      <button class="btn btn-copy" type="button" data-copy="micaelgomestargino@gmail.com"><span data-copy-label>micaelgomestargino@gmail.com</span></button>
+      <a class="btn" href="https://linkedin.com/in/micaeltargino" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/MicaelTargino" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="../Micael-Targino-CV.pdf" download>Download CV</a>
+    </div>
+    <p class="fineprint">Product screens are recreated with fictitious data. Client names and real traffic are never shown.</p>
+  </div>
+</footer>
+<script src="../main.js" defer></script>
+</body>
+</html>

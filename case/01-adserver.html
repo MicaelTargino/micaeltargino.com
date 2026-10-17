@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Metrike Ad Server: in-house ad serving for display, video and apps | Micael Targino</title>
+<meta name="description" content="An in-house ad server for display, video and apps, built to replace a third-party platform.">
+<meta property="og:title" content="Metrike Ad Server: in-house ad serving for display, video and apps | Micael Targino">
+<meta property="og:description" content="An in-house ad server for display, video and apps, built to replace a third-party platform.">
+<meta name="theme-color" content="#0b1020">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body class="case-page">
+<nav class="case-nav wrap"><a class="link" href="../index.html#01-adserver">Back to all work</a><a class="who-mini" href="../index.html"><img class="avatar" src="../photo.jpg" alt="Micael Targino" width="56" height="56"><span>Micael Targino</span></a></nav>
+<header class="case-hero wrap">
+  <h1 class="case-title">Metrike Ad Server: in-house ad serving for display, video and apps</h1>
+  <p class="case-role"><span class="live" aria-hidden="true"></span>Lead engineer — architecture, backend, SDKs, frontend</p>
+  <div class="case-screen">
+  <div class="screen screen-scroll" data-base="../" data-screen='{&quot;video&quot;:&quot;media/01-adserver/reel.mp4&quot;,&quot;poster&quot;:&quot;media/01-adserver/poster.jpg&quot;,&quot;shots&quot;:[&quot;media/01-adserver/00-cover.jpg&quot;,&quot;media/01-adserver/01-dashboard.jpg&quot;,&quot;media/01-adserver/02-campaign.jpg&quot;,&quot;media/01-adserver/03-campaign-geo.jpg&quot;,&quot;media/01-adserver/04-targeting.jpg&quot;,&quot;media/01-adserver/05-wizard-tag.jpg&quot;]}'>
+    <div class="screen-bar"><i></i><i></i><i></i></div>
+    <div class="screen-stage">
+      <img class="screen-poster" src="../media/01-adserver/poster.jpg" alt="Metrike Ad Server screen" loading="lazy">
+    </div>
+  </div></div>
+  <div class="stats stats-wide">
+  <div class="stat">
+    
+    <span class="stat-value" data-count>−41%</span>
+    <span class="stat-label">time to first ad on broadband</span>
+  </div>
+  <div class="stat">
+    
+    <span class="stat-value" data-count>~5 ms</span>
+    <span class="stat-label">server-side ad decisioning</span>
+  </div>
+  <div class="stat">
+    
+    <span class="stat-value" data-count>200M+</span>
+    <span class="stat-label">ad events a day, scaling horizontally</span>
+  </div></div>
+</header>
+<main class="wrap case-body">
+  <article class="prose"><h2>The problem</h2>
+<p>Metrike's ad delivery ran on a third-party ad server. The company needed its own platform to serve display and video campaigns, measure them in-house and report to advertisers, agencies and publishers from one place.</p>
+<h2>What I built</h2>
+<p>As lead engineer I designed and built the replacement end to end:</p>
+<ul><li>A multi-tenant admin and reporting hub in PHP/Laravel: advertisers, campaigns, creatives, publishers, zones and placements, a 7-step wizard that ends with a ready-to-paste tag, campaign dashboards with geography, video funnel and content verification, scheduled reports, conversion tracking, a BI API and scoped read-only access for external clients.</li><li>Serving and ingestion APIs in Python/FastAPI, a JavaScript ad tag, and a Pub/Sub to BigQuery event pipeline.</li><li>Display, HTML5 and video delivery: VAST 2.0 to 4.2, VMAP, VPAID, SIMID, OMID and companion ads, with IAB TCF v2 consent enforcement.</li><li>Native Android (Kotlin) and iOS (Swift) SDKs: banners, interstitials, MRAID 3.0, fullscreen and outstream VAST video, viewability measurement and install/deep-link conversion attribution, published with public docs.</li><li>Serve-time controls: layered invalid-traffic (IVT) filtering, render-integrity signals, GeoIP, brand-safety and GARM-risk targeting, device targeting, and dynamic creative optimization (CTR-based, Thompson sampling per zone).</li><li>Prometheus and Grafana monitoring, and a k6 load-testing harness that checks for zero data loss against BigQuery.</li></ul>
+<h2>Key decisions</h2>
+<ul><li>The ad tag requests the ad in parallel with the consent check instead of waiting for consent first. That is how time-to-creative came down 41% on broadband and 26% on slow 4G.</li><li>The tag bundle was cut from 48 KB to 17 KB.</li><li>Load tests verify every event against BigQuery, so capacity numbers come with a zero-data-loss check, not just request counts.</li><li>The serving tier scales horizontally: capacity grows linearly with instances.</li></ul>
+<h2>Results</h2>
+<ul><li>Ad tag time-to-creative down 41% on broadband and 26% on slow 4G.</li><li>Server-side decisioning in about 5 ms.</li><li>200M+ ad events a day, handled by scaling the serving tier horizontally.</li><li>Tag bundle reduced from 48 KB to 17 KB.</li></ul></article>
+  <section class="gallery" aria-label="Screens"><figure><img src="../media/01-adserver/00-cover.jpg" alt="Metrike Ad Server screen" loading="lazy"></figure><figure><img src="../media/01-adserver/01-dashboard.jpg" alt="Metrike Ad Server screen" loading="lazy"></figure><figure><img src="../media/01-adserver/02-campaign.jpg" alt="Metrike Ad Server screen" loading="lazy"></figure><figure><img src="../media/01-adserver/03-campaign-geo.jpg" alt="Metrike Ad Server screen" loading="lazy"></figure><figure><img src="../media/01-adserver/04-targeting.jpg" alt="Metrike Ad Server screen" loading="lazy"></figure><figure><img src="../media/01-adserver/05-wizard-tag.jpg" alt="Metrike Ad Server screen" loading="lazy"></figure></section>
+  <a class="next" href="05-data-pipelines.html"><span class="next-label">Next project</span><span class="next-name">Data pipelines and warehouses</span></a>
+</main>
+
+<footer class="contact" id="contact">
+  <div class="wrap">
+    <h2 class="contact-line">Have a system that is slow, fragile or still done by hand?</h2>
+    <div class="contact-actions">
+      <a class="btn btn-primary" href="mailto:micaelgomestargino@gmail.com?subject=Project%20or%20role%20for%20Micael">Email me</a>
+      <button class="btn btn-copy" type="button" data-copy="micaelgomestargino@gmail.com"><span data-copy-label>micaelgomestargino@gmail.com</span></button>
+      <a class="btn" href="https://linkedin.com/in/micaeltargino" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/MicaelTargino" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="../Micael-Targino-CV.pdf" download>Download CV</a>
+    </div>
+    <p class="fineprint">Product screens are recreated with fictitious data. Client names and real traffic are never shown.</p>
+  </div>
+</footer>
+<script src="../main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MRF: Fixed-Income Platform for Brazilian Investors | Micael Targino</title>
+<meta name="description" content="A platform for Brazilian fixed-income investors: market data, yield math and portfolio tracking.">
+<meta property="og:title" content="MRF: Fixed-Income Platform for Brazilian Investors | Micael Targino">
+<meta property="og:description" content="A platform for Brazilian fixed-income investors: market data, yield math and portfolio tracking.">
+<meta name="theme-color" content="#0b1020">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body class="case-page">
+<nav class="case-nav wrap"><a class="link" href="../index.html#04-mrf-fixed-income">Back to all work</a><a class="who-mini" href="../index.html"><img class="avatar" src="../photo.jpg" alt="Micael Targino" width="56" height="56"><span>Micael Targino</span></a></nav>
+<header class="case-hero wrap">
+  <h1 class="case-title">MRF: Fixed-Income Platform for Brazilian Investors</h1>
+  <p class="case-role"><span class="live" aria-hidden="true"></span>Freelance lead engineer — architecture, backend, data, frontend</p>
+  <div class="case-screen">
+  <div class="screen screen-scroll" data-base="../" data-screen='{&quot;video&quot;:&quot;media/04-mrf-fixed-income/reel.mp4&quot;,&quot;poster&quot;:&quot;media/04-mrf-fixed-income/poster.jpg&quot;,&quot;shots&quot;:[&quot;media/04-mrf-fixed-income/00-cover.jpg&quot;,&quot;media/04-mrf-fixed-income/01-carteira.jpg&quot;,&quot;media/04-mrf-fixed-income/02-ativo-debenture.jpg&quot;,&quot;media/04-mrf-fixed-income/03-calculadora.jpg&quot;,&quot;media/04-mrf-fixed-income/04-mercado-sinais.jpg&quot;,&quot;media/04-mrf-fixed-income/05-agenda-proventos.jpg&quot;]}'>
+    <div class="screen-bar"><i></i><i></i><i></i></div>
+    <div class="screen-stage">
+      <img class="screen-poster" src="../media/04-mrf-fixed-income/poster.jpg" alt="MRF screen" loading="lazy">
+    </div>
+  </div></div>
+  
+</header>
+<main class="wrap case-body">
+  <article class="prose"><h2>The problem</h2>
+<p>MRF wanted one place for fixed-income investors to follow debentures and other assets. That needs two things that are hard to get from a spreadsheet: market data that keeps up with the secondary market, and yield calculations that respect how these instruments actually pay. A debenture's return depends on business-day counts, inflation-indexed principal, compounding and amortization schedules, and small mistakes in any of them change the numbers an investor sees.</p>
+<h2>What I built</h2>
+<p>I worked as a freelancer from October 2024 to June 2025, architecting and leading the platform end to end.</p>
+<ul><li><strong>Market data ETL.</strong> Scrapers built with Selenium and orchestrated by Apache Airflow collect market data continuously and load it into MySQL.</li><li><strong>Backend.</strong> A FastAPI service exposes portfolio, asset and market data, with Redis caching.</li><li><strong>Yield engine.</strong> An IRR and yield calculator for fixed-income assets, written in Python with NumPy, that handles business days, inflation series, compounding and amortization.</li><li><strong>Investor features.</strong> Portfolio tracking with live wallet updates, trading suggestions, and projected payout (cash-flow) schedules for each position.</li><li><strong>Frontend and hosting.</strong> A Next.js frontend with server-side rendering. The platform is deployed on GCP and Vercel.</li></ul>
+<h2>Key decisions</h2>
+<ul><li><strong>Scraping as an orchestrated pipeline.</strong> Running collection through Airflow keeps market data flowing continuously instead of depending on scripts run by hand.</li><li><strong>Yield math in Python with NumPy.</strong> The calculations involve day counts, index series and amortizing balances. Keeping them in a numerical Python module on the backend puts that logic in one place behind the API instead of spreading it across the UI.</li><li><strong>Redis in front of FastAPI.</strong> Portfolio and market views read the same data repeatedly, so caching keeps those responses fast while the ETL keeps writing new prices underneath.</li><li><strong>Next.js with SSR.</strong> Pages render on the server with current data, so investors open a view that is already filled in.</li></ul>
+<h2>Results</h2>
+<ul><li>Delivered the full-stack platform for MRF, covering debentures and other fixed-income assets, from data collection to the investor-facing UI.</li><li>Continuous market data collection feeding portfolio tracking, live wallet updates and trading suggestions.</li><li>A yield calculator and projected payout schedules that account for business days, inflation series, compounding and amortization.</li><li>Deployed on GCP and Vercel.</li></ul></article>
+  <section class="gallery" aria-label="Screens"><figure><img src="../media/04-mrf-fixed-income/00-cover.jpg" alt="MRF screen" loading="lazy"></figure><figure><img src="../media/04-mrf-fixed-income/01-carteira.jpg" alt="MRF screen" loading="lazy"></figure><figure><img src="../media/04-mrf-fixed-income/02-ativo-debenture.jpg" alt="MRF screen" loading="lazy"></figure><figure><img src="../media/04-mrf-fixed-income/03-calculadora.jpg" alt="MRF screen" loading="lazy"></figure><figure><img src="../media/04-mrf-fixed-income/04-mercado-sinais.jpg" alt="MRF screen" loading="lazy"></figure><figure><img src="../media/04-mrf-fixed-income/05-agenda-proventos.jpg" alt="MRF screen" loading="lazy"></figure></section>
+  <a class="next" href="01-adserver.html"><span class="next-label">Next project</span><span class="next-name">Metrike Ad Server</span></a>
+</main>
+
+<footer class="contact" id="contact">
+  <div class="wrap">
+    <h2 class="contact-line">Have a system that is slow, fragile or still done by hand?</h2>
+    <div class="contact-actions">
+      <a class="btn btn-primary" href="mailto:micaelgomestargino@gmail.com?subject=Project%20or%20role%20for%20Micael">Email me</a>
+      <button class="btn btn-copy" type="button" data-copy="micaelgomestargino@gmail.com"><span data-copy-label>micaelgomestargino@gmail.com</span></button>
+      <a class="btn" href="https://linkedin.com/in/micaeltargino" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/MicaelTargino" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="../Micael-Targino-CV.pdf" download>Download CV</a>
+    </div>
+    <p class="fineprint">Product screens are recreated with fictitious data. Client names and real traffic are never shown.</p>
+  </div>
+</footer>
+<script src="../main.js" defer></script>
+</body>
+</html>

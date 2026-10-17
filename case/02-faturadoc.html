@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FaturaDoc: supplier compliance checks before campaign payments | Micael Targino</title>
+<meta name="description" content="Checks that media suppliers are in good standing with tax and labor authorities before an agency pays them.">
+<meta property="og:title" content="FaturaDoc: supplier compliance checks before campaign payments | Micael Targino">
+<meta property="og:description" content="Checks that media suppliers are in good standing with tax and labor authorities before an agency pays them.">
+<meta name="theme-color" content="#0b1020">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body class="case-page">
+<nav class="case-nav wrap"><a class="link" href="../index.html#02-faturadoc">Back to all work</a><a class="who-mini" href="../index.html"><img class="avatar" src="../photo.jpg" alt="Micael Targino" width="56" height="56"><span>Micael Targino</span></a></nav>
+<header class="case-hero wrap">
+  <h1 class="case-title">FaturaDoc: supplier compliance checks before campaign payments</h1>
+  <p class="case-role"><span class="live" aria-hidden="true"></span>Lead engineer — took over, rebuilt and runs it in production</p>
+  <div class="case-screen">
+  <div class="screen screen-scroll" data-base="../" data-screen='{&quot;video&quot;:&quot;media/02-faturadoc/reel.mp4&quot;,&quot;poster&quot;:&quot;media/02-faturadoc/poster.jpg&quot;,&quot;shots&quot;:[&quot;media/02-faturadoc/00-cover.jpg&quot;,&quot;media/02-faturadoc/01-campaign-suppliers.jpg&quot;,&quot;media/02-faturadoc/02-upload-processing.jpg&quot;,&quot;media/02-faturadoc/03-supplier-documents.jpg&quot;,&quot;media/02-faturadoc/04-risk-report.jpg&quot;]}'>
+    <div class="screen-bar"><i></i><i></i><i></i></div>
+    <div class="screen-stage">
+      <img class="screen-poster" src="../media/02-faturadoc/poster.jpg" alt="FaturaDoc screen" loading="lazy">
+    </div>
+  </div></div>
+  <div class="stats stats-wide">
+  <div class="stat">
+    
+    <span class="stat-value" data-count>5</span>
+    <span class="stat-label">government certificates checked per supplier</span>
+  </div>
+  <div class="stat">
+    
+    <span class="stat-value" data-count>−10k</span>
+    <span class="stat-label">lines of dead code removed</span>
+  </div></div>
+</header>
+<main class="wrap case-body">
+  <article class="prose"><h2>The problem</h2>
+<p>Before an agency pays the media suppliers of a campaign, someone has to collect each supplier's invoice and declarations and check that its tax and labor certificates (federal, state, municipal, FGTS and labor debts) are valid. Done by hand, that means chasing PDFs, opening government sites one by one and comparing numbers across documents.</p>
+<p>FaturaDoc was built to automate this, but I inherited it as an AI product that was not ready for production: the data it showed could not be trusted, and the code carried a lot of dead weight.</p>
+<h2>What I built</h2>
+<ul><li><strong>Data correctness first.</strong> I fixed how documents, certificates and statuses were stored and shown, so each supplier's situation on screen matches the facts behind it.</li><li><strong>OCR for scanned PDFs.</strong> Suppliers often send photographed or scanned invoices with no text layer. Those files now go through OCR, so the invoice number, supplier ID, period and amount can be read and checked like any other document.</li><li><strong>Government certificate lookups.</strong> Once a supplier's documents are complete, the system queries the issuing agencies for the certificates and records the result of each one: valid, irregular, lookup failed, or needs manual review.</li><li><strong>LLM risk reports.</strong> Gemini on Vertex AI cross-checks the documents against the certificate results and writes a report with a verdict, the findings that block payment, warnings such as certificates close to expiry, a risk level and recommendations for the agency.</li><li><strong>Integration with the campaign platform.</strong> FaturaDoc is connected to Metrike's campaign platform (web-metrike), so checks start from the campaign flow instead of being set up by hand.</li></ul>
+<p>The stack is FastAPI and Celery workers on PostgreSQL, with a React front end.</p>
+<h2>Key decisions</h2>
+<ul><li><strong>Fix the data before adding features.</strong> A compliance tool that shows a wrong status is worse than no tool, so correctness came before OCR or AI.</li><li><strong>OCR only where it is needed.</strong> Pages with a text layer are read directly; only scanned pages go through OCR, so both kinds of upload end up in the same checks.</li><li><strong>Delete what isn't used.</strong> I removed about 10k lines of dead code, which made the codebase smaller and easier to change safely.</li><li><strong>Track cost per campaign, internally.</strong> Processing cost is tracked per campaign for the team that runs the product. The agency sees compliance results, not infrastructure cost.</li></ul>
+<h2>Results</h2>
+<ul><li>The inherited product is in production and I operate it.</li><li>Servers are hardened: secrets rotated, SSH by key only, firewall in place.</li><li>Prometheus alerts are in place, and backups come with restore checks.</li><li>Each campaign's processing cost is tracked.</li><li>About 10k lines of dead code were removed.</li><li>Compliance checks start directly from Metrike's campaign platform.</li></ul></article>
+  <section class="gallery" aria-label="Screens"><figure><img src="../media/02-faturadoc/00-cover.jpg" alt="FaturaDoc screen" loading="lazy"></figure><figure><img src="../media/02-faturadoc/01-campaign-suppliers.jpg" alt="FaturaDoc screen" loading="lazy"></figure><figure><img src="../media/02-faturadoc/02-upload-processing.jpg" alt="FaturaDoc screen" loading="lazy"></figure><figure><img src="../media/02-faturadoc/03-supplier-documents.jpg" alt="FaturaDoc screen" loading="lazy"></figure><figure><img src="../media/02-faturadoc/04-risk-report.jpg" alt="FaturaDoc screen" loading="lazy"></figure></section>
+  <a class="next" href="04-mrf-fixed-income.html"><span class="next-label">Next project</span><span class="next-name">MRF</span></a>
+</main>
+
+<footer class="contact" id="contact">
+  <div class="wrap">
+    <h2 class="contact-line">Have a system that is slow, fragile or still done by hand?</h2>
+    <div class="contact-actions">
+      <a class="btn btn-primary" href="mailto:micaelgomestargino@gmail.com?subject=Project%20or%20role%20for%20Micael">Email me</a>
+      <button class="btn btn-copy" type="button" data-copy="micaelgomestargino@gmail.com"><span data-copy-label>micaelgomestargino@gmail.com</span></button>
+      <a class="btn" href="https://linkedin.com/in/micaeltargino" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/MicaelTargino" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="../Micael-Targino-CV.pdf" download>Download CV</a>
+    </div>
+    <p class="fineprint">Product screens are recreated with fictitious data. Client names and real traffic are never shown.</p>
+  </div>
+</footer>
+<script src="../main.js" defer></script>
+</body>
+</html>
