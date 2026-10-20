@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ContaFacil: multi-company finance back office replacing a SaaS | Micael Targino</title>
+<meta name="description" content="A white-label finance back office for a client's group of companies, built to replace a SaaS they were losing access to.">
+<meta property="og:title" content="ContaFacil: multi-company finance back office replacing a SaaS | Micael Targino">
+<meta property="og:description" content="A white-label finance back office for a client's group of companies, built to replace a SaaS they were losing access to.">
+<meta name="theme-color" content="#0b1020">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body class="case-page">
+<nav class="case-nav wrap"><a class="link" href="../index.html#06-contafacil">Back to all work</a><a class="who-mini" href="../index.html"><img class="avatar" src="../photo.jpg" alt="Micael Targino" width="56" height="56"><span>Micael Targino</span></a></nav>
+<header class="case-hero wrap">
+  <h1 class="case-title">ContaFacil: multi-company finance back office replacing a SaaS</h1>
+  <p class="case-role"><span class="live" aria-hidden="true"></span>Lead engineer — discovery, reverse engineering, architecture, backend, frontend, data migration, deployment</p>
+  <div class="case-screen">
+  <div class="screen screen-scroll" data-base="../" data-screen='{&quot;video&quot;:&quot;media/06-contafacil/reel.mp4&quot;,&quot;poster&quot;:&quot;media/06-contafacil/poster.jpg&quot;,&quot;shots&quot;:[&quot;media/06-contafacil/00-cover.jpg&quot;,&quot;media/06-contafacil/01-conciliacao.jpg&quot;,&quot;media/06-contafacil/02-fluxo-de-caixa.jpg&quot;,&quot;media/06-contafacil/03-lancamentos.jpg&quot;,&quot;media/06-contafacil/04-relatorio-personalizado.jpg&quot;,&quot;media/06-contafacil/05-tarefas.jpg&quot;]}'>
+    <div class="screen-bar"><i></i><i></i><i></i></div>
+    <div class="screen-stage">
+      <img class="screen-poster" src="../media/06-contafacil/poster.jpg" alt="ContaFacil screen" loading="lazy">
+    </div>
+  </div></div>
+  <div class="stats stats-wide">
+  <div class="stat">
+    
+    <span class="stat-value" data-count>46,527</span>
+    <span class="stat-label">account-days of balances matched to the cent</span>
+  </div>
+  <div class="stat">
+    
+    <span class="stat-value" data-count>72/72</span>
+    <span class="stat-label">migrated reports identical to the old system</span>
+  </div>
+  <div class="stat">
+    
+    <span class="stat-value" data-count>8,100+</span>
+    <span class="stat-label">transactions migrated with attachments and reconciliations</span>
+  </div></div>
+</header>
+<main class="wrap case-body">
+  <article class="prose"><h2>The problem</h2>
+<p>A client runs its group of companies on a finance SaaS whose plan was being discontinued, so it was about to lose access. There was a hard deadline of 17 days to move everything out: transactions, attachments, bank statements and reconciliations for three companies.</p>
+<p>The finance team also had to keep working the way it already did. The new system needed the exact screens and workflow they used every day, and the numbers had to be the same as before.</p>
+<h2>What I built</h2>
+<p>A white-label finance platform for the client's group. Each company's data is isolated, and one login can manage several companies.</p>
+<ul><li><strong>Reverse engineering and migration.</strong> I mapped the old system's screens and its internal API (read-only) and extracted everything: about 8,100 transactions across 3 companies, about 2,100 attachments, 87 bank statements with about 1,700 reconciled items, plus contacts, categories, cost centers and tags.</li><li><strong>Transactions.</strong> Installments and recurring series, splits by category and cost center, transfers between accounts and attachments. Bank accounts and their statements.</li><li><strong>Bank reconciliation.</strong> The user imports an OFX file, read by a parser that tolerates the quirks of Brazilian bank files. For each statement line the system suggests matching transactions, scored by value, date and the payee's name or CPF/CNPJ found in the statement text. The user always confirms; nothing is reconciled automatically.</li><li><strong>Reports.</strong> Ready-made cash flow, income vs. expenses and P&amp;L reports, a dashboard, and a custom report with two grouping levels and CSV/XLSX export.</li><li><strong>Permissions.</strong> Per company, by area and action: all, only mine, or none. A separate &quot;see balances and values&quot; switch masks amounts everywhere, including exports and charts.</li><li><strong>Notices.</strong> A daily e-mail and in-app notices for bills that are due or overdue.</li></ul>
+<h2>Key decisions</h2>
+<ul><li><strong>Prove the migration, don't eyeball it.</strong> Before go-live, an automated check compares the new system with the old one: transaction counts per year, every account's balance on every day of history, and the ready-made reports (cash flow, income vs. expenses, P&amp;L) for every company and year from 2023 to 2026. Re-importing is idempotent and refuses to overwrite records edited in the new system.</li><li><strong>Money as integer cents, balances always computed from transactions.</strong> No rounding drift, and no stored balance that can fall out of sync.</li><li><strong>A Django monolith with server-rendered pages</strong> (HTMX, Alpine and Tailwind). One codebase, fast to change under a tight deadline.</li><li><strong>Tests and review on every task.</strong> About 600 automated tests, including golden tests against the old system's own reports. Every task was reviewed for spec and security before the next one started.</li><li><strong>Fix the slow screen at the query level.</strong> The transactions list in its month-to-year view went from 568 to 18 queries, from about 11 s to 2 s.</li><li><strong>Attachments behind a permission check.</strong> Files live on object storage and are served only through short-lived signed links, after the user's permission is checked.</li><li>Deployed on a dedicated server with managed MySQL over TLS.</li></ul>
+<h2>Results</h2>
+<ul><li>The client moved off the old SaaS before the deadline, with all its history, attachments and reconciliations.</li><li>46,527 account-days of balances matched the old system to the cent, and 72 of 72 report comparisons matched to the cent.</li><li>The operator kept the same screens and workflow.</li><li>From the first meeting to production took about 2 days.</li></ul></article>
+  <section class="gallery" aria-label="Screens"><figure><img src="../media/06-contafacil/00-cover.jpg" alt="ContaFacil screen" loading="lazy"></figure><figure><img src="../media/06-contafacil/01-conciliacao.jpg" alt="ContaFacil screen" loading="lazy"></figure><figure><img src="../media/06-contafacil/02-fluxo-de-caixa.jpg" alt="ContaFacil screen" loading="lazy"></figure><figure><img src="../media/06-contafacil/03-lancamentos.jpg" alt="ContaFacil screen" loading="lazy"></figure><figure><img src="../media/06-contafacil/04-relatorio-personalizado.jpg" alt="ContaFacil screen" loading="lazy"></figure><figure><img src="../media/06-contafacil/05-tarefas.jpg" alt="ContaFacil screen" loading="lazy"></figure></section>
+  <a class="next" href="05-data-pipelines.html"><span class="next-label">Next project</span><span class="next-name">Data pipelines and warehouses</span></a>
+</main>
+
+<footer class="contact" id="contact">
+  <div class="wrap">
+    <h2 class="contact-line">Have a system that is slow, fragile or still done by hand?</h2>
+    <div class="contact-actions">
+      <a class="btn btn-primary" href="mailto:micaelgomestargino@gmail.com?subject=Project%20or%20role%20for%20Micael">Email me</a>
+      <button class="btn btn-copy" type="button" data-copy="micaelgomestargino@gmail.com"><span data-copy-label>micaelgomestargino@gmail.com</span></button>
+      <a class="btn" href="https://linkedin.com/in/micaeltargino" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/MicaelTargino" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="../Micael-Targino-CV.pdf" download>Download CV</a>
+    </div>
+    <p class="fineprint">Product screens are recreated with fictitious data. Client names and real traffic are never shown.</p>
+  </div>
+</footer>
+<script src="../main.js" defer></script>
+</body>
+</html>
