@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vitrine: social videos and posts from listing photos, with no GPU | Micael Targino</title>
+<meta name="description" content="Turns a property listing's photos into ready-to-post videos and social posts, rendered on an ordinary CPU.">
+<meta property="og:title" content="Vitrine: social videos and posts from listing photos, with no GPU | Micael Targino">
+<meta property="og:description" content="Turns a property listing's photos into ready-to-post videos and social posts, rendered on an ordinary CPU.">
+<meta name="theme-color" content="#0b1020">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<script>document.documentElement.classList.add("js")</script>
+</head>
+<body class="case-page">
+<nav class="case-nav wrap"><a class="link" href="../index.html#07-vitrine">Back to all work</a><a class="who-mini" href="../index.html"><img class="avatar" src="../photo.jpg" alt="Micael Targino" width="56" height="56"><span>Micael Targino</span></a></nav>
+<header class="case-hero wrap">
+  <h1 class="case-title">Vitrine: social videos and posts from listing photos, with no GPU</h1>
+  <p class="case-role"><span class="live" aria-hidden="true"></span>Sole engineer — spec, video engine, API, web UI</p>
+  <div class="case-screen">
+  <div class="screen screen-scroll" data-base="../" data-screen='{&quot;video&quot;:&quot;media/07-vitrine/reel.mp4&quot;,&quot;poster&quot;:&quot;media/07-vitrine/poster.jpg&quot;,&quot;shots&quot;:[&quot;media/07-vitrine/00-cover.jpg&quot;,&quot;media/07-vitrine/01-imoveis.jpg&quot;,&quot;media/07-vitrine/02-imovel.jpg&quot;,&quot;media/07-vitrine/03-resultados.jpg&quot;,&quot;media/07-vitrine/04-formatos.jpg&quot;,&quot;media/07-vitrine/05-posts.jpg&quot;]}'>
+    <div class="screen-bar"><i></i><i></i><i></i></div>
+    <div class="screen-stage">
+      <img class="screen-poster" src="../media/07-vitrine/poster.jpg" alt="Vitrine screen" loading="lazy">
+    </div>
+  </div></div>
+  <div class="stats stats-wide">
+  <div class="stat">
+    
+    <span class="stat-value" data-count>4</span>
+    <span class="stat-label">video formats from one set of listing photos</span>
+  </div>
+  <div class="stat">
+    
+    <span class="stat-value" data-count>0</span>
+    <span class="stat-label">GPUs or paid APIs per video</span>
+  </div>
+  <div class="stat">
+    
+    <span class="stat-value" data-count>153</span>
+    <span class="stat-label">automated tests, including real renders</span>
+  </div></div>
+</header>
+<main class="wrap case-body">
+  <article class="prose"><h2>The problem</h2>
+<p>A college team is building a CRM for a real-estate agency. For every listing, the agents need short videos and posts for Instagram, WhatsApp and property portals, in the right shape for each one: 9:16 for Reels and Stories, 4:5 and 1:1 for the feed, 16:9 for YouTube and the portals.</p>
+<p>Generative video tools charge per second of video and often need several attempts per scene. The brief was almost no budget and no GPU, so the videos had to be made on an ordinary CPU, at no cost per video.</p>
+<h2>What I built</h2>
+<p>A service that takes a listing (title, price, location, features, highlights) and its photos, and returns videos and posts ready to publish.</p>
+<ul><li><strong>Video engine.</strong> Smooth camera movement over each photo with easing, cross-fade or push transitions, and animated text: an opening card with title and price, room labels, a features panel and a closing card with the agency's logo and contact. The clean style shows each photo whole over a blurred copy of itself instead of cropping it. Frames are composed in NumPy and OpenCV in parallel and piped to FFmpeg in order.</li><li><strong>4 formats, 3 styles.</strong> 9:16, 4:5, 1:1 and 16:9 from the same photos. The elegant, modern and clean styles each set the fonts, colors, motion and transitions. Videos run 15, 30, 45 or 60 s.</li><li><strong>Posts and caption.</strong> A 4:5 carousel (cover, labeled photos, highlights, contact), a square post, a story and a caption with emojis and hashtags, all as a ZIP.</li><li><strong>Music without licensing issues.</strong> The project synthesizes its own background tracks, and users can upload their own.</li><li><strong>API and queue.</strong> FastAPI with SQLite and a worker pool, progress per job and retry. One call, <code>POST /api/generate</code>, creates or updates the listing from the CRM's ID, downloads the photos, queues the renders and posts the results to a callback URL when the batch finishes.</li><li><strong>Web interface.</strong> Upload and reorder photos, pick the cover, set the agency's logo and colors, choose style and formats, and watch each render's progress.</li></ul>
+<h2>Key decisions</h2>
+<ul><li><strong>Deterministic rendering instead of generative video.</strong> No GPU and no paid API per video, the same input always gives the same output, and the video never shows a room or a view that the property doesn't have.</li><li><strong>Integration through the API, not inside the CRM.</strong> The CRM needs one endpoint and one callback. The video service can run and scale on its own machine.</li><li><strong>Nothing to install but Python.</strong> FFmpeg ships as a Python package, fonts are open-licensed and the music is generated, so <code>uv sync</code> is the whole setup.</li><li><strong>Tested end to end.</strong> 153 automated tests cover the timeline, motion, overlays, posts, caption, API and queue, plus real low-resolution renders.</li></ul>
+<h2>Results</h2>
+<ul><li>One set of listing photos becomes 4 video formats, a carousel, a story and a caption.</li><li>A 30 s 1080p video renders in about two minutes on a busy 8-core laptop CPU, with no GPU.</li><li>No cost per video.</li><li>Built as an MVP for the CRM project; connecting it to the CRM is the next step.</li></ul></article>
+  <section class="gallery" aria-label="Screens"><figure><img src="../media/07-vitrine/00-cover.jpg" alt="Vitrine screen" loading="lazy"></figure><figure><img src="../media/07-vitrine/01-imoveis.jpg" alt="Vitrine screen" loading="lazy"></figure><figure><img src="../media/07-vitrine/02-imovel.jpg" alt="Vitrine screen" loading="lazy"></figure><figure><img src="../media/07-vitrine/03-resultados.jpg" alt="Vitrine screen" loading="lazy"></figure><figure><img src="../media/07-vitrine/04-formatos.jpg" alt="Vitrine screen" loading="lazy"></figure><figure><img src="../media/07-vitrine/05-posts.jpg" alt="Vitrine screen" loading="lazy"></figure></section>
+  <a class="next" href="01-adserver.html"><span class="next-label">Next project</span><span class="next-name">Metrike Ad Server</span></a>
+</main>
+
+<footer class="contact" id="contact">
+  <div class="wrap">
+    <h2 class="contact-line">Have a system that is slow, fragile or still done by hand?</h2>
+    <div class="contact-actions">
+      <a class="btn btn-primary" href="mailto:micaelgomestargino@gmail.com?subject=Project%20or%20role%20for%20Micael">Email me</a>
+      <button class="btn btn-copy" type="button" data-copy="micaelgomestargino@gmail.com"><span data-copy-label>micaelgomestargino@gmail.com</span></button>
+      <a class="btn" href="https://linkedin.com/in/micaeltargino" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/MicaelTargino" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="../Micael-Targino-CV.pdf" download>Download CV</a>
+    </div>
+    <p class="fineprint">Product screens are recreated with fictitious data. Client names and real traffic are never shown.</p>
+  </div>
+</footer>
+<script src="../main.js" defer></script>
+</body>
+</html>
